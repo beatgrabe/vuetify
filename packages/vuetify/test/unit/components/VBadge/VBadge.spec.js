@@ -1,5 +1,6 @@
 import VBadge from '@/components/VBadge'
 import { test } from '@/test'
+import Vue from 'vue'
 
 test('VBadge.js', ({ mount, compileToFunctions }) => {
   it('should render component and match snapshot', async () => {
@@ -70,5 +71,40 @@ test('VBadge.js', ({ mount, compileToFunctions }) => {
     const badge = wrapper.find('.v-badge__badge')[0]
     expect(badge.hasClass('green')).toBe(true)
     expect(badge.hasClass('lighten-1')).toBe(true)
+  })
+
+  it('should render component with transition element', () => {
+    const transitionMock = {
+      name: 'transition',
+      render: jest.fn()
+    }
+
+    const instance = Vue.extend()
+    instance.component('transition', transitionMock)
+
+    mount(VBadge, {
+      instance
+    })
+
+    expect(transitionMock.render).toHaveBeenCalled()
+  })
+
+  it('should render component without transition element', () => {
+    const transitionMock = {
+      name: 'transition',
+      render: jest.fn()
+    }
+
+    const instance = Vue.extend()
+    instance.component('transition', transitionMock)
+
+    mount(VBadge, {
+      propsData: {
+        transition: ''
+      },
+      instance
+    })
+
+    expect(transitionMock.render).not.toHaveBeenCalled()
   })
 })
